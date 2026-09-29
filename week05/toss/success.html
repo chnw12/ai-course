@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>결제 성공</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: 0 auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        h1 { color: #28a745; }
+    </style>
+</head>
+<body>
+    <h1>✅ 결제 성공</h1>
+    <p>결제가 정상적으로 완료되었습니다.</p>
+    <table id="result-table">
+        <thead>
+            <tr>
+                <th>항목</th>
+                <th>값</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            const queryObj = {};
+            for (const [key, value] of params.entries()) {
+                queryObj[key] = value;
+            }
+            return queryObj;
+        }
+
+        const params = getQueryParams();
+        const tbody = document.querySelector("#result-table tbody");
+
+        if (Object.keys(params).length === 0) {
+            tbody.innerHTML = "<tr><td colspan='2'>쿼리 파라미터가 없습니다.</td></tr>";
+        } else {
+            for (const [key, value] of Object.entries(params)) {
+                const row = tbody.insertRow();
+                const cell1 = row.insertCell(0);
+                const cell2 = row.insertCell(1);
+                cell1.textContent = key;
+                cell2.textContent = value;
+            }
+        }
+    </script>
+</body>
+</html>

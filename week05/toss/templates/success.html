@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>결제 성공</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: 0 auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        h1 { color: #28a745; }
+        pre { background-color: #f4f4f4; padding: 15px; overflow-x: auto; border-radius: 5px; border: 1px solid #ddd; }
+    </style>
+</head>
+<body id="body">
+    <h1 id="title">결제 결과</h1>
+    <div id="content"></div>
+    <table id="result-table" style="display:none;">
+        <thead>
+            <tr>
+                <th>항목</th>
+                <th>값</th>
+            </tr>
+        </thead>
+        <tbody id="result-body"></tbody>
+    </table>
+    <div id="json-section" style="display:none;">
+        <h3>원본 JSON 데이터</h3>
+        <pre id="json-raw"></pre>
+    </div>
+
+    <script>
+        // 서버에서 이미 처리된 결과(성공/실패)를 JSON으로 내려준다고 가정하거나, 
+        // 스펙에 따라 쿼리 파라미터를 기반으로 결과를 보여줌.
+        // 하지만 SPEC에서는 /success가 서버에서 승인 API를 호출한 뒤 결과를 보여준다고 했으므로,
+        // 서버가 응답한 데이터를 template에 전달하는 방식이 Flask의 standard임.
+
+        // Flask에서 render_template('success.html', data=data) 형태로 내려줄 것이므로,
+        // Jinja2 문법을 사용하는 것이 맞으나, 여기서는 정적 HTML로 일단 구조만 잡음.
+        // 실제로는 서버가 주입한 데이터를 기반으로 동작함.
+    </script>
+</body>
+</html>
