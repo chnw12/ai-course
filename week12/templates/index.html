@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나눠 내기 계산기</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+        .divider {
+            text-align: center;
+            margin: 1.5rem 0;
+            color: #aaa;
+            font-size: 0.8rem;
+            position: relative;
+        }
+        .divider::before, .divider::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background-color: #eee;
+        }
+        .divider::before { left: 0; }
+        .divider::after { right: 0; }
+        
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+        button.secondary {
+            background-color: #6c757d;
+        }
+        button:active {
+            opacity: 0.8;
+        }
+        .result {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: #e7f3ff;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .result p {
+            margin: 0;
+            color: #007bff;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .error {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: #f8d7da;
+            color: #721c24;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .item-list {
+            margin-top: 1.5rem;
+            border-top: 1px solid #eee;
+            padding-top: 1rem;
+        }
+        .item-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+        .item-name { color: #333; }
+        .item-price { color: #666; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💰 나눠 내기 계산기</h1>
+        <form method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="people">인원 수 (명)</label>
+                <input type="number" id="people" name="people" placeholder="예: 3" required min="1" value="1">
+            </div>
+
+            <div class="divider">또는 영수증 사진 업로드</div>
+
+            <div class="form-group">
+                <label for="receipt">영수증 사진</label>
+                <input type="file" id="receipt" name="receipt" accept="image/*">
+            </div>
+            <button type="submit" class="secondary">사진으로 계산하기</button>
+
+            <div class="divider">또는 직접 입력</div>
+
+            <div class="form-group">
+                <label for="amount">총 금액 (원)</label>
+                <input type="number" id="amount" name="amount" placeholder="예: 30000">
+            </div>
+            <button type="submit">직접 입력하여 계산하기</button>
+        </form>
+
+        {% if error %}
+        <div class="error">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        {% if items %}
+        <div class="item-list">
+            <div style="font-weight: bold; margin-bottom: 0.5rem;">🧾 인식된 내역:</div>
+            {% for item in items %}
+            <div class="item-row">
+                <span class="item-name">{{ item.item }}</span>
+                <span class="item-price">{{ "{:,.0f}".format(item.price) }}원</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if result is not none %}
+        <div class="result">
+            <p>1인당 {{ "{:,.0f}".format(result) }}원</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나눠 내기 계산기</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+        button:active {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: #e7f3ff;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .result p {
+            margin: 0;
+            color: #007bff;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💰 나눠 내기 계산기</h1>
+        <form method="POST">
+            <div class="form-group">
+                <label for="amount">총 금액 (원)</label>
+                <input type="number" id="amount" name="amount" placeholder="예: 30000" required>
+            </div>
+            <div class="form-group">
+                <label for="people">인원 수 (명)</label>
+                <input type="number" id="people" name="people" placeholder="예: 3" required min="1">
+            </div>
+            <button type="submit">계산하기</button>
+        </form>
+
+        {% if result %}
+        <div class="result">
+            <p>1인당 {{ "{:,.0f}".format(result) }}원</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
